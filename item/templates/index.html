@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Kompukolekt!</h1>
+
+    {% lorem 4 p %}
+
+    <span class="glyphicon glyphicon-hdd"></span> Last 10 registered computers:
+    <ul>
+    {% for computer in computers %}
+        <li><a href="/item/{{ computer.id }}">{{ computer }}</a></li>
+    {% endfor %}
+    </ul>
+
+    <br/>
+
+    <span class="glyphicon glyphicon-user"></span> Last 5 registered users:
+    <ul>
+        {% for user in last_users %}
+        <li>{{ user.username }} ({{ user.date_joined }})</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

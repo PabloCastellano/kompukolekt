@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Detalles de {{ computer }}</h1>
+
+    <h3>Data</h3>
+    <p>{{ computer.description }}</p>
+
+    <p>{% lorem 1 p %}</p>
+
+    <ul>
+        <li>Year: {{ computer.year }}</li>
+        <li>Laptop: {{ computer.is_laptop }}</li>
+        <li>Public: {{ computer.is_public }}</li>
+    </ul>
+
+    <h3>Componentes</h3>
+
+    <table class="table table-hover table-striped">
+        <tbody>
+            <tr>
+                <td><strong>CPU:</strong></td>
+                <td>{{ computer.cpu }}</td>
+            </tr>
+            <tr>
+                <td><strong>Motherboard:</strong></td>
+                <td>{{ computer.mobo }}</td>
+            </tr>
+            <tr>
+                <td><strong>GPU:</strong></td>
+                <td>{{ computer.gpu }}</td>
+            </tr>
+            <tr>
+                <td><strong>Hard disk:</strong></td>
+                <td>{{ computer.hd }}</td>
+            </tr>
+            <tr>
+                <td><strong>Memory:</strong></td>
+                <td>{{ computer.memory }}</td>
+            </tr>
+            <tr>
+                <td><strong>Network adapter:</strong></td>
+                <td>{{ computer.network }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Benchmarks</h3>
+    <table class="table table-hover table-striped">
+        <tbody>
+            <tr>
+                <td><strong>CPU:</strong></td>
+                <td>{{ computer.cpu.benchmark }}</td>
+            </tr>
+            <tr>
+                <td><strong>GPU:</strong></td>
+                <td>{{ computer.gpu.benchmark|default:"Not available" }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
