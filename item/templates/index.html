@@ -9,7 +9,7 @@
     <i class="glyphicon glyphicon-hdd"></i> Last 10 registered computers:
     <ul>
     {% for computer in computers %}
-        <li><a href="/item/{{ computer.id }}">{{ computer }}</a></li>
+        <li><a href="{{ computer.get_absolute_url }}">{{ computer.name }}</a> (from {{ computer.user }})</li>
     {% endfor %}
     </ul>
 

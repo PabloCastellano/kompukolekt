@@ -13,7 +13,7 @@
     {% if user.is_authenticated and user == computer.user %}
     <a href="{% url 'item-edit' computer.id %}">
     <button type="button" class="btn btn-default btn-success">
-            <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i> Edit
+        <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i> Edit
     </button>
     </a>
     {% endif %}
@@ -35,27 +35,27 @@
         <tbody>
             <tr>
                 <td><strong>CPU:</strong></td>
-                <td>{{ computer.cpu }}</td>
+                <td>{{ computer.cpu }} {% if computer.cpu.url_vendor %}<a href="{{ computer.cpu.url_vendor }}"><i class="glyphicon glyphicon-share"></i></a>{% endif %}</td>
             </tr>
             <tr>
                 <td><strong>Motherboard:</strong></td>
-                <td>{{ computer.mobo }}</td>
+                <td>{{ computer.mobo }} {% if computer.mobo.url_vendor %}<a href="{{ computer.mobo.url_vendor }}"><i class="glyphicon glyphicon-share"></i></a>{% endif %}</td>
             </tr>
             <tr>
                 <td><strong>GPU:</strong></td>
-                <td>{{ computer.gpu }}</td>
+                <td>{{ computer.gpu }} {% if computer.gpu.url_vendor %}<a href="{{ computer.gpu.url_vendor }}"><i class="glyphicon glyphicon-share"></i></a>{% endif %}</td>
             </tr>
             <tr>
                 <td><strong>Hard disk:</strong></td>
-                <td>{{ computer.hd }}</td>
+                <td>{{ computer.hd }} {% if computer.hd.url_vendor %}<a href="{{ computer.gpu.url_vendor }}"><i class="glyphicon glyphicon-share"></i></a>{% endif %}</td>
             </tr>
             <tr>
                 <td><strong>Memory:</strong></td>
-                <td>{{ computer.memory }}</td>
+                <td>{{ computer.memory }} {% if computer.memory.url_vendor %}<a href="{{ computer.memory.url_vendor }}"><i class="glyphicon glyphicon-share"></i></a>{% endif %}</td>
             </tr>
             <tr>
                 <td><strong>Network adapter:</strong></td>
-                <td>{{ computer.network }}</td>
+                <td>{{ computer.network }} {% if computer.network.url_vendor %}<a href="{{ computer.network.url_vendor }}"><i class="glyphicon glyphicon-share"></i></a>{% endif %}</td>
             </tr>
         </tbody>
     </table>

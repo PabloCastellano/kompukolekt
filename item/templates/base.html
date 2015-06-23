@@ -31,10 +31,11 @@
       <i class="glyphicon glyphicon-user"></i>
 {% if user.is_authenticated %}
     Welcome, <strong>{{ user.username }}</strong>. |
-    <a href="/dashboard">My dashboard</a> |
-    <i class="glyphicon glyphicon-log-out"></i> <a href="/account/logout">Log out</a>
+    <a href="{% url 'item-dashboard' %}">My dashboard</a> |
+      <a href="{% url 'profile' %}">My account</a> |
+    <i class="glyphicon glyphicon-log-out"></i> <a href="{% url 'logout' %}">Log out</a>
 {% else %}
-    Please <a href="/account/login">log in</a> or <a href="/account/register">register</a>.
+    Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">register</a>.
 {% endif %}
 
   </div>

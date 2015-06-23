@@ -16,8 +16,8 @@
     <ul>
     {% for computer in computers %}
         <li>{% if not computer.is_public %}<i class="glyphicon glyphicon-lock"></i>{% endif %}
-            <a href="/item/{{ computer.id }}">{{ computer.name }}</a>
-            ({{ computer.cpu }}, {{ computer.mobo }}, {{ computer.gpu }}, {{ computer.memory.capacity_mb }}MB RAM, {{ computer.hd.type }} {{ computer.hd.capacity_gb }}GB)
+            <a href="{{ computer.get_absolute_url }}">{{ computer.name }}</a>
+            ({{ computer.cpu }}, {{ computer.mobo }}, {{ computer.gpu }}, {{ computer.memory.get_capacity_mb_display }} RAM, {{ computer.hd.type }} {{ computer.hd.capacity_gb }}GB)
         </li>
     {% endfor %}
     </ul>

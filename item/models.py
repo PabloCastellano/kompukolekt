@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib import admin
 
@@ -10,6 +11,9 @@ class UserProfile(models.Model):
 
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('profile', args=[str(self.id)])
 
     def __unicode__(self):
         return self.user.username
@@ -32,8 +36,15 @@ class Computer(models.Model):
     created_at = models.DateTimeField() # TODO: hide field
     updated_at = models.DateTimeField() # TODO: hide field
 
+    class Meta:
+        unique_together = (("user", "name"),)
+
+    def get_absolute_url(self):
+        return reverse('item-detail', args=[str(self.id)])
+
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.user)
+
 
 class CPU(models.Model):
     name = models.CharField(max_length=100)
@@ -107,7 +118,7 @@ class Memory(models.Model):
     capacity_mb = models.IntegerField(choices=MEMORY_CHOICES)
 
     def __unicode__(self):
-        return "%s %s (%dMB)" % (self.vendor, self.name, self.capacity_mb) # MEMORY_CHOICES[self.capacity_mb]
+        return "%s %s (%s)" % (self.vendor, self.name, self.get_capacity_mb_display()) # MEMORY_CHOICES[self.capacity_mb]
 
 
 SPEED_CHOICES = (

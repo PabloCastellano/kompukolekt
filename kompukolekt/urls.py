@@ -19,7 +19,8 @@ from item import views
 
 urlpatterns = [
     url(r'^', include('item.urls')),
-    url(r'^account/register/$', views.register),
+    url(r'^account/register/$', views.register, name='register'),
+    url(r'^account/profile/$', views.user_profile, name='profile'),
     url(r'^account/', include('django.contrib.auth.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
