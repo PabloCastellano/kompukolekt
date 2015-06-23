@@ -8,12 +8,13 @@
   <meta name="description" content="kopmukolekt, inventario, informatica">
   <meta name="author" content="Pablo Castellano">
   {% load staticfiles %}
-  <link rel="icon" href="{% static "favicon.ico" %}">
+  <link rel="icon" href="{% static 'favicon.ico' %}">
 
   <title>{% block title %}KompuKolekt!{% endblock %}</title>
 
-  <link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
-  <link href="{% static "css/kompukolekt.css" %}" rel="stylesheet">
+  <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+  <link href="{% static 'css/kompukolekt.css' %}" rel="stylesheet">
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </head>
 
 <body>
@@ -26,12 +27,12 @@
   <div class="navbar-form navbar-left">
   <a href="#"><img src="{% static "logo.png" %}"></a>
   <div class="form-group">
-      <a href="{% url 'home' %}" style="color: black"><span class="glyphicon glyphicon-barcode"></span> <strong>KompuKolekt!</strong></a>
+      <a href="{% url 'home' %}" style="color: black"><i class="glyphicon glyphicon-barcode"></i> <strong>KompuKolekt!</strong></a>
       <i class="glyphicon glyphicon-user"></i>
 {% if user.is_authenticated %}
     Welcome, <strong>{{ user.username }}</strong>. |
-    <a href="/item/dashboard">My dashboard</a> |
-    <span class="glyphicon glyphicon-log-out"></span> <a href="/account/logout">Log out</a>
+    <a href="/dashboard">My dashboard</a> |
+    <i class="glyphicon glyphicon-log-out"></i> <a href="/account/logout">Log out</a>
 {% else %}
     Please <a href="/account/login">log in</a> or <a href="/account/register">register</a>.
 {% endif %}
@@ -45,6 +46,18 @@
         <img style="position: absolute; top: 0; right: 0; border: 0;" src="{% static "forkme_right_red_aa0000.png" %}" alt="Fork me on GitHub"
         data-canonical-src="{% static "forkme_right_red_aa0000.png" %}">
     </a>
+
+    {% if messages %}
+    <div id="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}}">
+                <a class="close" data-dismiss="alert">×</a>
+                {{message}}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     {% block content %}{% endblock %}
 
     <footer class="footer">
