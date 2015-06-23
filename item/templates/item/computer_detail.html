@@ -2,11 +2,12 @@
 
 {% block content %}
 
-    <h1>Detalles de {{ computer }}</h1>
+    <h1>Detalles de {{ computer.name }}</h1>
     <div>
         <i class="glyphicon glyphicon-star"></i> <strong>Benchmarks.</strong>
          CPU: {{ computer.cpu.benchmark|default:"Not available" }},
          GPU: {{ computer.gpu.benchmark|default:"Not available" }}.
+         HD: {{ computer.hd.benchmark|default:"Not available" }}.
     </div>
     <br/>
 
@@ -70,6 +71,10 @@
             <tr>
                 <td><strong>GPU:</strong></td>
                 <td>{{ computer.gpu.benchmark|default:"Not available" }}</td>
+            </tr>
+            <tr>
+                <td><strong>Hard disk:</strong></td>
+                <td>{{ computer.hd.benchmark|default:"Not available" }}</td>
             </tr>
         </tbody>
     </table>

@@ -6,6 +6,7 @@ from django.contrib import admin
 # Vendor = 'Generic'
 # Varios modulos RAM, varias GPUs, varios HDs...
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
@@ -26,6 +27,7 @@ class Computer(models.Model):
     vendor = models.CharField(max_length=50, blank=True, null=True)
     is_laptop = models.BooleanField()
     is_public = models.BooleanField()
+    active = models.BooleanField(default=True)
     cpu = models.ForeignKey('CPU')
     mobo = models.ForeignKey('Motherboard')
     gpu = models.ForeignKey('GPU')
@@ -33,8 +35,8 @@ class Computer(models.Model):
     memory = models.ForeignKey('Memory')
     network = models.ForeignKey('NetworkAdapter')
     year = models.IntegerField()
-    created_at = models.DateTimeField() # TODO: hide field
-    updated_at = models.DateTimeField() # TODO: hide field
+    created_at = models.DateTimeField()  # TODO: hide field
+    updated_at = models.DateTimeField()  # TODO: hide field
 
     class Meta:
         unique_together = (("user", "name"),)
@@ -55,6 +57,7 @@ class CPU(models.Model):
     benchmark = models.IntegerField(blank=True, null=True)
     url_benchmark = models.URLField(blank=True, null=True)
 
+    # TODO: save() -> get benchmarks
     def __unicode__(self):
         return "%s %s" % (self.vendor, self.model)
 
@@ -76,6 +79,7 @@ class GPU(models.Model):
     benchmark = models.IntegerField(blank=True, null=True)
     url_benchmark = models.URLField(blank=True, null=True)
 
+    # TODO: save() -> get benchmarks
     def __unicode__(self):
         return "%s %s" % (self.vendor, self.name)
 
@@ -85,6 +89,20 @@ HARDDISK_CHOICES = (
     ('SSD', 'Solid State Drive'),
 )
 
+HARDDISK_CAPACITY_CHOICES = (
+    (20, '20 GB'),
+    (50, '50 GB'),
+    (240, '240 GB'),
+    (250, '250 GB'),
+    (500, '500 GB'),
+    (1024, '1 TB'),
+    (2048, '2 TB'),
+    (3072, '3 TB'),
+    (4096, '4 TB'),
+    (8192, '8 TB'),
+)
+
+
 class HardDisk(models.Model):
     name = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
@@ -92,11 +110,11 @@ class HardDisk(models.Model):
     url_vendor = models.URLField(blank=True, null=True)
     benchmark = models.IntegerField(blank=True, null=True)
     url_benchmark = models.URLField(blank=True, null=True)
-    capacity_gb = models.IntegerField()
+    capacity_gb = models.IntegerField(choices=HARDDISK_CAPACITY_CHOICES)
     type = models.CharField(max_length=10, choices=HARDDISK_CHOICES)
 
     def __unicode__(self):
-        return "%s %s (%dGB)" % (self.vendor, self.name, self.capacity_gb)
+        return "%s %s (%s)" % (self.vendor, self.name, self.get_capacity_gb_display())
 
 
 MEMORY_CHOICES = (
@@ -108,6 +126,7 @@ MEMORY_CHOICES = (
     (8192, '8 GB'),
 )
 
+
 class Memory(models.Model):
     name = models.CharField(max_length=100)
     vendor = models.CharField(max_length=50)
@@ -118,7 +137,7 @@ class Memory(models.Model):
     capacity_mb = models.IntegerField(choices=MEMORY_CHOICES)
 
     def __unicode__(self):
-        return "%s %s (%s)" % (self.vendor, self.name, self.get_capacity_mb_display()) # MEMORY_CHOICES[self.capacity_mb]
+        return "%s %s (%s)" % (self.vendor, self.name, self.get_capacity_mb_display())
 
 
 SPEED_CHOICES = (
@@ -128,17 +147,18 @@ SPEED_CHOICES = (
     ('10 Gbps', '10 Gbps')
 )
 
+
 class NetworkAdapter(models.Model):
     name = models.CharField(max_length=100)
     vendor = models.CharField(max_length=50)
     url_vendor = models.URLField(blank=True, null=True)
     wireless = models.BooleanField()
     speed = models.CharField(max_length=10, choices=SPEED_CHOICES)
-    mac = models.CharField(max_length=17, blank=True, null=True) # XX:XX:XX:XX:XX:XX
+    mac = models.CharField(max_length=17, blank=True, null=True)  # XX:XX:XX:XX:XX:XX
     driver = models.CharField(max_length=20, blank=True, null=True)
 
     def __unicode__(self):
-        return "%s %s" % (self.vendor, self.name)
+        return "%s %s (%s)" % (self.vendor, self.name, self.get_speed_display())
 
 
 admin.site.register(Computer)
