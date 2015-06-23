@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
+
     <h1>Detalles de {{ computer }}</h1>
+    <div>
+        <i class="glyphicon glyphicon-star"></i> <strong>Benchmarks.</strong>
+         CPU: {{ computer.cpu.benchmark|default:"Not available" }},
+         GPU: {{ computer.gpu.benchmark|default:"Not available" }}.
+    </div>
+    <br/>
+
+    {% if user.is_authenticated and user == computer.user %}
+    <a href="{% url 'item-edit' computer.id %}">
+    <button type="button" class="btn btn-default btn-success">
+            <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i> Edit
+    </button>
+    </a>
+    {% endif %}
 
     <h3>Data</h3>
     <p>{{ computer.description }}</p>

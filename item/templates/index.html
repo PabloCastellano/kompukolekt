@@ -6,7 +6,7 @@
 
     {% lorem 4 p %}
 
-    <span class="glyphicon glyphicon-hdd"></span> Last 10 registered computers:
+    <i class="glyphicon glyphicon-hdd"></i> Last 10 registered computers:
     <ul>
     {% for computer in computers %}
         <li><a href="/item/{{ computer.id }}">{{ computer }}</a></li>
@@ -15,7 +15,7 @@
 
     <br/>
 
-    <span class="glyphicon glyphicon-user"></span> Last 5 registered users:
+    <i class="glyphicon glyphicon-user"></i> Last 5 registered users:
     <ul>
         {% for user in last_users %}
         <li>{{ user.username }} ({{ user.date_joined }})</li>

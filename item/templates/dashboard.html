@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Dashboard!</h1>
+
+    <a href="{% url 'item-new' %}">
+        <button type="button" class="btn btn-default btn-primary">
+            <i class="glyphicon glyphicon-plus"></i> Add new computer
+        </button>
+    </a>
+    <br/>
+    {% lorem 1 p %}
+
+    <i class="glyphicon glyphicon-hdd"></i> Your computers ({{ computers|length }}):
+    <ul>
+    {% for computer in computers %}
+        <li>{% if not computer.is_public %}<i class="glyphicon glyphicon-lock"></i>{% endif %}
+            <a href="/item/{{ computer.id }}">{{ computer.name }}</a>
+            ({{ computer.cpu }}, {{ computer.mobo }}, {{ computer.gpu }}, {{ computer.memory.capacity_mb }}MB RAM, {{ computer.hd.type }} {{ computer.hd.capacity_gb }}GB)
+        </li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
