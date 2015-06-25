@@ -11,10 +11,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, DetailView
 
 from item.forms import UserForm, UserProfileForm, ComputerForm
-from item.models import Computer, HardDisk, CPU, GPU, Motherboard, Memory, NetworkAdapter
-from item.parsers import parse_inxi
+from item.models import Computer
+from item.parsers import create_computer_from_parser
 
 import datetime
+
+
+def user_profile(request):
+    return HttpResponseRedirect(reverse('item-dashboard'))
 
 
 def edit_item(request, pk):
@@ -123,7 +127,8 @@ def submit_item(request):
         if user is None or not user.is_active:
             return HttpResponse('Login error', status=500)
 
-        hostname = request.POST.get('hostname')
+        #hostname = request.POST.get('hostname')
+        hostname = 'dummy'
         format = request.POST.get('type')
         data = request.FILES.get('data')
         print (data, format, hostname)
@@ -134,72 +139,14 @@ def submit_item(request):
 
         content = data.read()
 
-        if format == 'inxi':
-             computer_dict = parse_inxi(content)
-        elif format == 'sysinfo':
-            raise NotImplementedError
-        else:
+        try:
+            computer = create_computer_from_parser(content, user, format)
+        except:
             return HttpResponse('Unknown type "%s"' % format, status=500)
 
-        try:
-            Computer.objects.get(name=computer_dict['hostname'], user=User.objects.get(username=username))
+        if not computer:
             return HttpResponse('Computer name already exists for this user', status=500)
-        except Computer.DoesNotExist:
-            pass
 
-        try:
-            gpu = GPU.objects.get(name=computer_dict['gpu_name'])
-        except GPU.DoesNotExist:
-            if 'NVIDIA' in computer_dict['gpu_chipset']:
-                gpu_vendor = 'NVIDIA'
-            elif 'ATI' in computer_dict['gpu_chipset']:
-                gpu_vendor = 'ATI'
-            else:
-                gpu_vendor = 'Unknown'
-            gpu = GPU.objects.create(name=computer_dict['gpu_name'], vendor=gpu_vendor)
-
-        try:
-            cpu = CPU.objects.get(name=computer_dict['cpu'])
-        except CPU.DoesNotExist:
-            if 'Intel' in computer_dict['cpu']:
-                cpu_vendor = 'Intel'
-            elif 'AMD' in computer_dict['cpu']:
-                cpu_vendor = 'AMD'
-            else:
-                cpu_vendor = 'Unknown'
-            cpu = CPU.objects.create(name=computer_dict['cpu'], model=computer_dict['cpu'], vendor=cpu_vendor)
-
-        try:
-            hd = HardDisk.objects.get(model=computer_dict['hd_model'])
-        except HardDisk.DoesNotExist:
-            assert(computer_dict['hd_unit'] == 'GB')
-            hd = HardDisk.objects.create(name=computer_dict['hd_model'], model=computer_dict['hd_model'], capacity_gb=computer_dict['hd_capacity'])
-
-        mobo, _ = Motherboard.objects.get_or_create(vendor=computer_dict['mobo_vendor'], name=computer_dict['mobo_model'])
-        generic_memory = Memory.objects.get(name='Generic', capacity_mb=1024)
-        generic_network = NetworkAdapter.objects.get(name='Generic', speed='1 Gbps')
-        # Computer(computer).save()
-        print(cpu)
-        print(gpu)
-        print(hd)
-        computer = Computer(name=computer_dict['hostname'], user=User.objects.get(username='pablo'))
-        computer.is_laptop = False
-        computer.is_public = True
-        computer.cpu = cpu
-        computer.mobo = mobo
-        computer.gpu = gpu
-        computer.hd = hd
-        computer.memory = generic_memory
-        computer.network = generic_network
-        computer.created_at = datetime.datetime.now()
-        computer.updated_at = datetime.datetime.now()
-        computer.year = datetime.datetime.now().year
-        computer.save()
-
-        # TODO: Save to "uploads" folder
-        fname = "info_%d-%s-%s.txt" % (computer.id, computer.user, datetime.datetime.now())
-        with open(fname, 'wb+') as fp:
-            fp.write(content)
         return HttpResponse('OK')
 
     return HttpResponse()
