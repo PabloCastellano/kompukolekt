@@ -114,3 +114,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
+
+# Change to your own:
+STATICFILES_DIRS = (
+    '/home/pablo/src/kompukolekt/kompukolekt/static/',
+)
+
+# STATIC_ROOT = '/home/kompukolekt/static'
+
